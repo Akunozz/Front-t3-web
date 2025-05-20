@@ -39,7 +39,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 
       if (user) {
         sessionStorage.setItem("user", JSON.stringify(user));
-        router.push("/dashboard");
+        router.push("/roadmaps");
       } else {
         setError("Login ou senha inválidos");
       }
