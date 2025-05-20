@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import logo from "@/assets/roadmap.png";
 
-const API_URL = "https://project3-2025a-breno-pedro.onrender.com";
+const API_URL = "https://project3-2025a-breno-pedro.onrender.com/usuarios";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const router = useRouter();
@@ -26,9 +26,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `${API_URL}}/usuarios`
-      );
+      const res = await fetch("/api/usuarios");
+
       if (!res.ok) throw new Error("Falha ao buscar usuários");
 
       const users: Array<{ login: string; senha: string; [key: string]: any }> =
