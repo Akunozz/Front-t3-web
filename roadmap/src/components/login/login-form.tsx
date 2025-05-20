@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import logo from "@/assets/roadmap.png";
 
-const API_URL = "https://project3-2025a-breno-pedro.onrender.com/usuarios";
+// const API_URL = "https://project3-2025a-breno-pedro.onrender.com/usuarios";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const router = useRouter();
@@ -38,9 +38,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
       );
 
       if (user) {
-        // Exemplo simples: gravar no sessionStorage
         sessionStorage.setItem("user", JSON.stringify(user));
-        // redireciona para rota privada
         router.push("/dashboard");
       } else {
         setError("Login ou senha inválidos");

@@ -2,22 +2,19 @@
 
 import * as React from "react"
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
+  Accessibility,
+  BugPlay,
+  Code,
+  Codesandbox,
+  CodeXml,
+  Computer,
+  FileType,
 } from "lucide-react"
 
 import { NavMain } from "@/components/sidebar/nav-main"
 import { NavProjects } from "@/components/sidebar/nav-projects"
 import { NavUser } from "@/components/sidebar/nav-user"
-import { TeamSwitcher } from "@/components/sidebar/team-switcher"
+
 import {
   Sidebar,
   SidebarContent,
@@ -25,113 +22,97 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import Image from "next/image"
+import logo from "@/assets/roadmap.png"
 
-// This is sample data.
 const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
-      title: "Playground",
+      title: "Front-End",
       url: "#",
-      icon: SquareTerminal,
+      icon: CodeXml,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "React",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "React Native",
           url: "#",
         },
         {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
+          title: "Angular",
           url: "#",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "Backend",
       url: "#",
-      icon: BookOpen,
+      icon: BugPlay,
       items: [
         {
-          title: "Introduction",
+          title: "Node.js",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "Java",
           url: "#",
         },
         {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
+          title: "Python",
           url: "#",
         },
       ],
     },
     {
-      title: "Settings",
+      title: "DevOps",
       url: "#",
-      icon: Settings2,
+      icon: Codesandbox,
       items: [
         {
-          title: "General",
+          title: "Docker",
           url: "#",
         },
         {
-          title: "Team",
+          title: "AWS",
           url: "#",
         },
         {
-          title: "Billing",
+          title: "Kubernetes",
           url: "#",
         },
         {
-          title: "Limits",
+          title: "",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Data Analyst",
+      url: "#",
+      icon: Computer,
+      items: [
+        {
+          title: "SQL",
+          url: "#",
+        },
+        {
+          title: "Python",
+          url: "#",
+        },
+        {
+          title: "R",
+          url: "#",
+        },
+        {
+          title: "Data Structures",
           url: "#",
         },
       ],
@@ -139,19 +120,19 @@ const data = {
   ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "JavaScript",
       url: "#",
-      icon: Frame,
+      icon: Code,
     },
     {
-      name: "Sales & Marketing",
+      name: "Typescript",
       url: "#",
-      icon: PieChart,
+      icon: FileType,
     },
     {
-      name: "Travel",
+      name: "PHP",
       url: "#",
-      icon: Map,
+      icon: Accessibility,
     },
   ],
 }
@@ -160,7 +141,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <div className="flex h-16 items-center justify-center mt-2">
+        <Image src={logo} alt="logo" width={100}/>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
