@@ -30,18 +30,31 @@ interface Roadmap {
 
 export default function RoadmapsPage() {
   const [roadmaps, setRoadmaps] = useState<Roadmap[]>([]);
+  const [usersMap, setUsersMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchRoadmaps() {
+    async function fetchData() {
       try {
-        const res = await fetch(
-          "https://project3-2025a-breno-pedro.onrender.com/roadmaps"
-        );
-        if (!res.ok) throw new Error("Falha ao carregar roadmaps");
-        const data: Roadmap[] = await res.json();
-        setRoadmaps(data);
+        const [roadRes, usersRes] = await Promise.all([
+          fetch("https://project3-2025a-breno-pedro.onrender.com/roadmaps"),
+          fetch("https://project3-2025a-breno-pedro.onrender.com/usuarios"),
+        ]);
+
+        if (!roadRes.ok) throw new Error("Falha ao carregar roadmaps");
+        if (!usersRes.ok) throw new Error("Falha ao carregar usuários");
+
+        const roads: Roadmap[] = await roadRes.json();
+        const users: Array<{ _id: string; nome: string }> = await usersRes.json();
+
+        const map: Record<string, string> = {};
+        users.forEach((u) => {
+          map[u._id] = u.nome;
+        });
+
+        setUsersMap(map);
+        setRoadmaps(roads);
       } catch (err: any) {
         setError(err.message || "Erro desconhecido");
       } finally {
@@ -49,7 +62,7 @@ export default function RoadmapsPage() {
       }
     }
 
-    fetchRoadmaps();
+    fetchData();
   }, []);
 
   if (loading) {
@@ -86,7 +99,7 @@ export default function RoadmapsPage() {
               {rm.descricao}
             </CardDescription>
             <p className="text-sm text-muted-foreground mt-1">
-              Criado por: {rm.autor}
+              Criado por: {usersMap[rm.autor] || rm.autor}
             </p>
           </CardHeader>
 
