@@ -1,0 +1,122 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { CirclePlus, Edit2 } from "lucide-react";
+
+interface Passo {
+  _id: string;
+  titulo: string;
+  descricao: string;
+  concluido: boolean;
+}
+
+interface Roadmap {
+  _id: string;
+  titulo: string;
+  descricao: string;
+  autor: string;
+  createdAt: string;
+  updatedAt: string;
+  passos: Passo[];
+}
+
+export default function MyRoadmapsPage() {
+  const [mine, setMine] = useState<Roadmap[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem("user");
+    if (!stored) {
+      setError("Você não está logado");
+      setLoading(false);
+      return;
+    }
+    const user = JSON.parse(stored);
+    const userId = user._id as string;
+
+    fetch("https://project3-2025a-breno-pedro.onrender.com/roadmaps")
+      .then((res) => {
+        if (!res.ok) throw new Error("Falha ao carregar roadmaps");
+        return res.json() as Promise<Roadmap[]>;
+      })
+      .then((all) => {
+        setMine(all.filter((rm) => rm.autor === userId));
+      })
+      .catch((err: any) => setError(err.message || "Erro desconhecido"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading)
+    return <p className="p-6 text-center">Carregando seus roadmaps...</p>;
+  if (error)
+    return <p className="p-6 text-center text-red-600">{error}</p>;
+
+  return (
+    <main className="space-y-10 p-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Meus Roadmaps</h1>
+        <Link href="/roadmaps/create">
+          <Button className="bg-blue-500 hover:bg-blue-600">
+            <CirclePlus className="mr-2" /> Criar novo Roadmap
+          </Button>
+        </Link>
+      </div>
+
+      {mine.length === 0 && (
+        <p className="text-center text-muted-foreground">
+          Você ainda não criou nenhum roadmap.
+        </p>
+      )}
+
+      {mine.map((rm) => (
+        <Card key={rm._id} className="p-6 overflow-hidden">
+          <CardHeader className="px-0 relative">
+            <CardTitle className="text-2xl">{rm.titulo}</CardTitle>
+            <CardDescription className="text-base">{rm.descricao}</CardDescription>
+            <p className="text-sm text-muted-foreground mt-1">
+              Criado por: Eu mesmo
+            </p>
+            {/* Botão de editar */}
+            <Link
+              href={`/roadmaps/${rm._id}/edit`}
+              className="absolute top-6 right-6"
+            >
+              <Button variant="outline" size="icon">
+                <Edit2 className="h-4 w-4" />
+                <span className="sr-only">Editar roadmap</span>
+              </Button>
+            </Link>
+          </CardHeader>
+
+          <div className="mt-8 relative">
+            <div className="absolute left-6 top-0 bottom-0 w-1 bg-blue-200 rounded-full" />
+            <div className="space-y-16">
+              {rm.passos.map((passo, idx) => (
+                <div key={passo._id} className="relative">
+                  <div className="absolute left-6 top-6 w-10 h-1 bg-blue-200" />
+                  <div className="flex items-start ml-16">
+                    <div className="p-4 rounded-lg border border-blue-100 bg-white w-full">
+                      <h3 className="font-semibold text-lg">
+                        {passo.titulo}
+                      </h3>
+                      <p className="text-gray-600 mt-1">
+                        {passo.descricao}
+                      </p>
+                      <div className="absolute right-4 top-4 bg-blue-100 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">
+                        {idx + 1}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+      ))}
+    </main>
+  );
+}

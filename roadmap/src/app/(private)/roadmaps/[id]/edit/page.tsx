@@ -1,27 +1,59 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 interface PassoInput {
+  _id?: string;
   titulo: string;
   descricao: string;
+  concluido?: boolean;
 }
 
-export default function NewRoadmapPage() {
+export default function EditRoadmapPage() {
   const router = useRouter();
+  const params = useParams() as { id: string };
+  const { id } = params;
+
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [passos, setPassos] = useState<PassoInput[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    async function loadRoadmap() {
+      try {
+        const res = await fetch(
+          `https://project3-2025a-breno-pedro.onrender.com/roadmaps/${id}`
+        );
+        if (!res.ok) throw new Error("Não foi possível carregar o roadmap");
+        const data = await res.json();
+        setTitulo(data.titulo);
+        setDescricao(data.descricao);
+        setPassos(
+          data.passos.map((p: any) => ({
+            _id: p._id,
+            titulo: p.titulo,
+            descricao: p.descricao,
+            concluido: p.concluido,
+          }))
+        );
+      } catch (err: any) {
+        setError(err.message || "Erro desconhecido");
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadRoadmap();
+  }, [id]);
+
   function addPasso() {
-    setPassos((prev) => [...prev, { titulo: "", descricao: "" }]);
+    setPassos((prev) => [...prev, { titulo: "", descricao: "", concluido: false }]);
   }
 
   function removePasso(index: number) {
@@ -38,27 +70,21 @@ export default function NewRoadmapPage() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
     try {
-      // pega o usuário logado do sessionStorage
-      const stored = sessionStorage.getItem("user");
-      const usuario = stored ? JSON.parse(stored) : null;
-      const autor = usuario?._id;
-      if (!autor) throw new Error("Usuário não autenticado");
-
-      const body = {
-        titulo,
-        descricao,
-        passos: passos.map((p) => ({ ...p, concluido: false })),
-        autor, // inclui o campo autor
-      };
-      const res = await fetch("/api/roadmaps", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) throw new Error("Falha ao criar roadmap");
-      router.push("/roadmaps");
+      const body = { titulo, descricao, passos };
+      const res = await fetch(
+        `https://project3-2025a-breno-pedro.onrender.com/roadmaps/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "Falha ao atualizar roadmap");
+      }
+      router.push("/roadmaps/mine");
     } catch (err: any) {
       setError(err.message || "Erro desconhecido");
     } finally {
@@ -66,10 +92,16 @@ export default function NewRoadmapPage() {
     }
   }
 
+  if (loading) {
+    return <p className="p-6 text-center">Carregando dados...</p>;
+  }
+  if (error) {
+    return <p className="p-6 text-center text-red-600">{error}</p>;
+  }
+
   return (
     <main className="p-6 max-w-2xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold">Criar Novo Roadmap</h1>
-      {error && <p className="text-red-600">{error}</p>}
+      <h1 className="text-2xl font-bold">Editar Roadmap</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1">
           <Label htmlFor="titulo">Título</Label>
@@ -89,7 +121,6 @@ export default function NewRoadmapPage() {
             required
           />
         </div>
-
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold">Passos</h2>
@@ -97,9 +128,11 @@ export default function NewRoadmapPage() {
               Adicionar Passo
             </Button>
           </div>
-
           {passos.map((passo, idx) => (
-            <div key={idx} className="border p-4 rounded space-y-2 relative">
+            <div
+              key={idx}
+              className="border p-4 rounded space-y-2 relative"
+            >
               <Button
                 variant="ghost"
                 size="icon"
@@ -133,9 +166,8 @@ export default function NewRoadmapPage() {
             </div>
           ))}
         </div>
-
         <Button type="submit" disabled={loading} className="w-full">
-          {loading ? "Salvando..." : "Criar Roadmap"}
+          {loading ? "Salvando..." : "Atualizar Roadmap"}
         </Button>
       </form>
     </main>
