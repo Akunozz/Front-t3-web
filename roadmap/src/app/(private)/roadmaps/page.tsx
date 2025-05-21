@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CirclePlus } from "lucide-react";
@@ -17,7 +22,7 @@ interface Roadmap {
   _id: string;
   titulo: string;
   descricao: string;
-  autor: string; 
+  autor: string;
   createdAt: string;
   updatedAt: string;
   passos: Passo[];
@@ -59,18 +64,27 @@ export default function RoadmapsPage() {
     <main className="space-y-10 p-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Roadmaps Criados</h1>
-        <Link href="/roadmaps/create">
-          <Button className="bg-blue-500 hover:bg-blue-600">
-            <CirclePlus className="mr-2" /> Criar novo RoadMap
-          </Button>
-        </Link>
+        <div className="flex items-center space-x-4">
+          <Link href="/roadmaps/mine">
+            <Button className="bg-blue-500 hover:bg-blue-600">
+              Ver meus Roadmaps
+            </Button>
+          </Link>
+          <Link href="/roadmaps/create">
+            <Button className="bg-blue-500 hover:bg-blue-600">
+              <CirclePlus className="mr-2" /> Criar novo RoadMap
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {roadmaps.map((rm) => (
         <Card key={rm._id} className="p-6 overflow-hidden">
           <CardHeader className="px-0">
             <CardTitle className="text-2xl">{rm.titulo}</CardTitle>
-            <CardDescription className="text-base">{rm.descricao}</CardDescription>
+            <CardDescription className="text-base">
+              {rm.descricao}
+            </CardDescription>
             <p className="text-sm text-muted-foreground mt-1">
               Criado por: {rm.autor}
             </p>
