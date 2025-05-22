@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
+import { ArrowLeftCircle } from "lucide-react";
 
 interface PassoInput {
   _id?: string;
@@ -101,7 +103,15 @@ export default function EditRoadmapPage() {
 
   return (
     <main className="p-6 max-w-2xl mx-auto space-y-6">
+      <div className="flex items-center justify-between space-x-6">
       <h1 className="text-2xl font-bold">Editar Roadmap</h1>
+      <Link href="/roadmaps/mine">
+      <Button className="bg-blue-500 hover:bg-blue-600">
+        <ArrowLeftCircle />
+        Voltar para meus Roadmaps
+        </Button>
+        </Link>
+        </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1">
           <Label htmlFor="titulo">Título</Label>

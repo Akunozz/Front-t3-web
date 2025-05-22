@@ -105,23 +105,23 @@ export default function RoadmapsPage() {
 
           <div className="mt-8 relative">
             {/* Linha de conexão vertical */}
-            <div className="absolute left-6 top-0 bottom-0 w-1 bg-blue-200 rounded-full" />
+            <div className="absolute left-6 top-0 bottom-0 w-1 bg-blue-200 dark:bg-blue-700 rounded-full" />
 
             {/* Passos do roadmap */}
             <div className="space-y-16">
               {rm.passos.map((passo, index) => (
                 <div key={passo._id} className="relative">
                   {/* Linha horizontal de conexão */}
-                  <div className="absolute left-6 top-6 w-10 h-1 bg-blue-200" />
+                  <div className="absolute left-6 top-6 w-10 h-1 bg-blue-200 dark:bg-blue-700" />
 
                   {/* Nó do passo */}
                   <div className="flex items-start ml-16">
-                    <div className="p-4 rounded-lg border border-blue-100 bg-white w-full">
+                    <div className="p-4 rounded-lg border border-blue-100 bg-white dark:bg-zinc-700 w-full">
                       <h3 className="font-semibold text-lg">{passo.titulo}</h3>
-                      <p className="text-gray-600 mt-1">{passo.descricao}</p>
+                      <p className="text-gray-600 dark:text-zinc-200 mt-1">{passo.descricao}</p>
 
                       {/* Número do passo */}
-                      <div className="absolute right-4 top-4 bg-blue-100 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">
+                      <div className="absolute right-4 top-4 bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-black rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">
                         {index + 1}
                       </div>
                     </div>

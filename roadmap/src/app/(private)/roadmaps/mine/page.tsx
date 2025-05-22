@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeftCircle, CirclePlus, Edit2 } from "lucide-react";
+import { ArrowLeftCircle, CirclePlus, Edit2, Trash2 } from "lucide-react";
 
 interface Passo {
   _id: string;
@@ -66,7 +66,7 @@ export default function MyRoadmapsPage() {
         <div className="flex items-center space-x-4">
           <Link href="/roadmaps">
             <Button className="bg-blue-500 hover:bg-blue-600">
-                <ArrowLeftCircle />
+              <ArrowLeftCircle />
               Voltar para todos os Roadmaps
             </Button>
           </Link>
@@ -95,29 +95,45 @@ export default function MyRoadmapsPage() {
               Criado por: Eu mesmo
             </p>
             {/* Botão de editar */}
-            <Link
-              href={`/roadmaps/${rm._id}/edit`}
-              className="absolute top-6 right-6"
-            >
-              <Button variant="outline" size="icon">
-                <Edit2 className="h-4 w-4" />
-                <span className="sr-only">Editar roadmap</span>
+            <div className="flex items-center justify-between">
+              <Link
+                href={`/roadmaps/${rm._id}/edit`}
+                className="absolute top-6 right-6"
+              >
+                <Button variant="outline" size="icon">
+                  <Edit2 className="h-4 w-4 text-blue-500" />
+                  <span className="sr-only">Editar roadmap</span>
+                </Button>
+              </Link>
+
+              <Button className="absolute top-6 right-16 text-blue-500" variant="outline" size="icon">
+                <Trash2 />
               </Button>
-            </Link>
+            </div>
           </CardHeader>
 
           <div className="mt-8 relative">
-            <div className="absolute left-6 top-0 bottom-0 w-1 bg-blue-200 rounded-full" />
+            {/* Linha de conexão vertical */}
+            <div className="absolute left-6 top-0 bottom-0 w-1 bg-blue-200 dark:bg-blue-700 rounded-full" />
+
+            {/* Passos do roadmap */}
             <div className="space-y-16">
-              {rm.passos.map((passo, idx) => (
+              {rm.passos.map((passo, index) => (
                 <div key={passo._id} className="relative">
-                  <div className="absolute left-6 top-6 w-10 h-1 bg-blue-200" />
+                  {/* Linha horizontal de conexão */}
+                  <div className="absolute left-6 top-6 w-10 h-1 bg-blue-200 dark:bg-blue-700" />
+
+                  {/* Nó do passo */}
                   <div className="flex items-start ml-16">
-                    <div className="p-4 rounded-lg border border-blue-100 bg-white w-full">
+                    <div className="p-4 rounded-lg border border-blue-100 bg-white dark:bg-zinc-700 w-full">
                       <h3 className="font-semibold text-lg">{passo.titulo}</h3>
-                      <p className="text-gray-600 mt-1">{passo.descricao}</p>
-                      <div className="absolute right-4 top-4 bg-blue-100 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">
-                        {idx + 1}
+                      <p className="text-gray-600 dark:text-zinc-200 mt-1">
+                        {passo.descricao}
+                      </p>
+
+                      {/* Número do passo */}
+                      <div className="absolute right-4 top-4 bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-black rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">
+                        {index + 1}
                       </div>
                     </div>
                   </div>
