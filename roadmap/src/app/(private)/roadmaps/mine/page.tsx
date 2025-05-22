@@ -32,6 +32,7 @@ export default function MyRoadmapsPage() {
   const [mine, setMine] = useState<Roadmap[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showConfirmId, setShowConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     const stored = sessionStorage.getItem("user");
@@ -54,6 +55,19 @@ export default function MyRoadmapsPage() {
       .catch((err: any) => setError(err.message || "Erro desconhecido"))
       .finally(() => setLoading(false));
   }, []);
+
+  const handleDelete = async (id: string) => {
+    try {
+      await fetch(`https://project3-2025a-breno-pedro.onrender.com/roadmaps/${id}`, {
+        method: "DELETE",
+      });
+      setMine((prev) => prev.filter((rm) => rm._id !== id));
+    } catch (err) {
+      console.error("Erro ao excluir roadmap:", err);
+    } finally {
+      setShowConfirmId(null);
+    }
+  };
 
   if (loading)
     return <p className="p-6 text-center">Carregando seus roadmaps...</p>;
@@ -94,7 +108,7 @@ export default function MyRoadmapsPage() {
             <p className="text-sm text-muted-foreground mt-1">
               Criado por: Eu mesmo
             </p>
-            {/* Botão de editar */}
+
             <div className="flex items-center justify-between">
               <Link
                 href={`/roadmaps/${rm._id}/edit`}
@@ -106,24 +120,25 @@ export default function MyRoadmapsPage() {
                 </Button>
               </Link>
 
-              <Button className="absolute top-6 right-16 text-blue-500" variant="outline" size="icon">
+              <Button
+                className="absolute top-6 right-16 text-blue-500"
+                variant="outline"
+                size="icon"
+                onClick={() => setShowConfirmId(rm._id)}
+              >
                 <Trash2 />
               </Button>
             </div>
           </CardHeader>
 
           <div className="mt-8 relative">
-            {/* Linha de conexão vertical */}
             <div className="absolute left-6 top-0 bottom-0 w-1 bg-blue-200 dark:bg-blue-700 rounded-full" />
 
-            {/* Passos do roadmap */}
             <div className="space-y-16">
               {rm.passos.map((passo, index) => (
                 <div key={passo._id} className="relative">
-                  {/* Linha horizontal de conexão */}
                   <div className="absolute left-6 top-6 w-10 h-1 bg-blue-200 dark:bg-blue-700" />
 
-                  {/* Nó do passo */}
                   <div className="flex items-start ml-16">
                     <div className="p-4 rounded-lg border border-blue-100 bg-white dark:bg-zinc-700 w-full">
                       <h3 className="font-semibold text-lg">{passo.titulo}</h3>
@@ -131,7 +146,6 @@ export default function MyRoadmapsPage() {
                         {passo.descricao}
                       </p>
 
-                      {/* Número do passo */}
                       <div className="absolute right-4 top-4 bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-black rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">
                         {index + 1}
                       </div>
@@ -143,6 +157,26 @@ export default function MyRoadmapsPage() {
           </div>
         </Card>
       ))}
+      {showConfirmId && (
+        <div className="fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center pointer-events-none">
+          <div className="bg-white border border-gray-300 rounded-lg shadow-md p-6 w-[90%] max-w-md text-center pointer-events-auto">
+            <h2 className="text-lg font-semibold mb-4">
+              Tem certeza que deseja excluir este roadmap?
+            </h2>
+            <div className="flex justify-center gap-4">
+              <Button variant="outline" onClick={() => setShowConfirmId(null)}>
+                Voltar
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => handleDelete(showConfirmId)}
+              >
+                Sim, excluir
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

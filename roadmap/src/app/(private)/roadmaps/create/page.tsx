@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeftCircle} from "lucide-react";
 
 interface PassoInput {
   titulo: string;
@@ -69,6 +70,16 @@ export default function NewRoadmapPage() {
   return (
     <main className="p-6 max-w-2xl mx-auto space-y-6">
       <h1 className="text-2xl font-bold">Criar Novo Roadmap</h1>
+      <div className="text-center">
+        <Button
+          className="bg-blue-500 hover:bg-blue-600 text-white hover:text-white focus:text-white focus:outline-none"
+          variant="outline"
+          onClick={() => router.push("/roadmaps/mine")}
+        >
+          <ArrowLeftCircle className="mr-2" />
+          Voltar para Meus Roadmaps
+        </Button>
+      </div>
       {error && <p className="text-red-600">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1">
