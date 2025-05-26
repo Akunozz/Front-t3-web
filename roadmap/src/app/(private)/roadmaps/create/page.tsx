@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeftCircle} from "lucide-react";
+import { ArrowLeftCircle } from "lucide-react";
 
 interface PassoInput {
   titulo: string;
@@ -41,7 +41,6 @@ export default function NewRoadmapPage() {
     setLoading(true);
 
     try {
-      // pega o usuário logado do sessionStorage
       const stored = sessionStorage.getItem("user");
       const usuario = stored ? JSON.parse(stored) : null;
       const autor = usuario?._id;
@@ -51,7 +50,7 @@ export default function NewRoadmapPage() {
         titulo,
         descricao,
         passos: passos.map((p) => ({ ...p, concluido: false })),
-        autor, // inclui o campo autor
+        autor,
       };
       const res = await fetch("/api/roadmaps", {
         method: "POST",
@@ -68,20 +67,22 @@ export default function NewRoadmapPage() {
   }
 
   return (
-    <main className="p-6 max-w-2xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold">Criar Novo Roadmap</h1>
-      <div className="text-center">
-        <Button
-          className="bg-blue-500 hover:bg-blue-600 text-white hover:text-white focus:text-white focus:outline-none"
-          variant="outline"
-          onClick={() => router.push("/roadmaps/mine")}
-        >
-          <ArrowLeftCircle className="mr-2" />
-          Voltar para Meus Roadmaps
-        </Button>
-      </div>
+    <main className="p-6 w-full space-y-6">
+      <header className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Criar Novo Roadmap</h1>
+        <div>
+          <Button
+            className="bg-blue-500 hover:bg-blue-600 text-white hover:text-white"
+            variant="outline"
+            onClick={() => router.push("/roadmaps/mine")}
+          >
+            <ArrowLeftCircle className="mr-2" />
+            Voltar para Meus Roadmaps
+          </Button>
+        </div>
+      </header>
       {error && <p className="text-red-600">{error}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl mx-auto">
         <div className="space-y-1">
           <Label htmlFor="titulo">Título</Label>
           <Input
