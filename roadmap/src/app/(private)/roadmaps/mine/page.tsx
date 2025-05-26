@@ -99,10 +99,10 @@ export default function MyRoadmapsPage() {
       )}
 
       {mine.map((rm) => (
-        <Card key={rm._id} className="p-6 overflow-hidden">
+        <Card key={rm._id} className="mx-auto p-6 max-w-[1000px] overflow-y-auto overflow-x-hidden">
           <CardHeader className="px-0 relative">
-            <CardTitle className="text-2xl">{rm.titulo}</CardTitle>
-            <CardDescription className="text-base">
+            <CardTitle className="text-2xl break-words break-all">{rm.titulo}</CardTitle>
+            <CardDescription className="text-base break-words break-all">
               {rm.descricao}
             </CardDescription>
             <p className="text-sm text-muted-foreground mt-1">
@@ -112,7 +112,7 @@ export default function MyRoadmapsPage() {
             <div className="flex items-center justify-between">
               <Link
                 href={`/roadmaps/${rm._id}/edit`}
-                className="absolute top-6 right-6"
+                className="absolute top-0 right-2"
               >
                 <Button variant="outline" size="icon">
                   <Edit2 className="h-4 w-4 text-blue-500" />
@@ -121,7 +121,7 @@ export default function MyRoadmapsPage() {
               </Link>
 
               <Button
-                className="absolute top-6 right-16 text-blue-500"
+                className="absolute top-0 right-12 text-blue-500"
                 variant="outline"
                 size="icon"
                 onClick={() => setShowConfirmId(rm._id)}
@@ -141,8 +141,8 @@ export default function MyRoadmapsPage() {
 
                   <div className="flex items-start ml-16">
                     <div className="p-4 rounded-lg border border-blue-100 bg-white dark:bg-zinc-700 w-full">
-                      <h3 className="font-semibold text-lg">{passo.titulo}</h3>
-                      <p className="text-gray-600 dark:text-zinc-200 mt-1">
+                      <h3 className="font-semibold text-lg break-words break-all">{passo.titulo}</h3>
+                      <p className="text-gray-600 dark:text-zinc-200 mt-1 break-words break-all">
                         {passo.descricao}
                       </p>
 

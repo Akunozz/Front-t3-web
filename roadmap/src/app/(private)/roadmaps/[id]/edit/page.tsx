@@ -55,7 +55,10 @@ export default function EditRoadmapPage() {
   }, [id]);
 
   function addPasso() {
-    setPassos((prev) => [...prev, { titulo: "", descricao: "", concluido: false }]);
+    setPassos((prev) => [
+      ...prev,
+      { titulo: "", descricao: "", concluido: false },
+    ]);
   }
 
   function removePasso(index: number) {
@@ -102,17 +105,17 @@ export default function EditRoadmapPage() {
   }
 
   return (
-    <main className="p-6 max-w-2xl mx-auto space-y-6">
-      <div className="flex items-center justify-between space-x-6">
-      <h1 className="text-2xl font-bold">Editar Roadmap</h1>
-      <Link href="/roadmaps/mine">
-      <Button className="bg-blue-500 hover:bg-blue-600">
-        <ArrowLeftCircle />
-        Voltar para meus Roadmaps
-        </Button>
-        </Link>
+    <main className="p-6 w-full mx-auto space-y-6">
+        <div className="flex items-center justify-between space-x-6">
+          <h1 className="text-2xl font-bold">Editar Roadmap</h1>
+          <Link href="/roadmaps/mine">
+            <Button className="bg-blue-500 hover:bg-blue-600">
+              <ArrowLeftCircle />
+              Voltar para meus Roadmaps
+            </Button>
+          </Link>
         </div>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="mx-auto space-y-4 max-w-[1000px]">
         <div className="space-y-1">
           <Label htmlFor="titulo">Título</Label>
           <Input
@@ -139,10 +142,7 @@ export default function EditRoadmapPage() {
             </Button>
           </div>
           {passos.map((passo, idx) => (
-            <div
-              key={idx}
-              className="border p-4 rounded space-y-2 relative"
-            >
+            <div key={idx} className="border p-4 rounded space-y-2 relative">
               <Button
                 variant="ghost"
                 size="icon"
